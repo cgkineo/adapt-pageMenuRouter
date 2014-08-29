@@ -198,6 +198,15 @@ To add a button to a component:
     }
 ```
 
+Use to _dom item to add attributes or styles to your buttons or topnavigation buttons:
+```
+
+"_dom": ".newClass.newClass2#newId[newAttribute='newAttributeValue']"
+
+
+```
+See [Emmet.io Cheatsheet](http://docs.emmet.io/cheat-sheet/)
+
 To add a top navigation button to a single page:
 ```
     "_pageMenuRouter": {
