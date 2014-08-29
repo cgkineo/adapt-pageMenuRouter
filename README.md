@@ -50,7 +50,7 @@ Routes are applied to:
 
 ]
 
-"blocks": [
+"_blocks": [
 
 ]
 
