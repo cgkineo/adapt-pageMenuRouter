@@ -1,0 +1,14 @@
+{
+  "name": "adapt-pageMenuRouter",
+  "homepage": "https://github.com/cgkineo/adapt-pageMenuRouter",
+  "authors": [
+    "Oliver Foster <oliver.foster@kineo.com"
+  ],
+  "description": "%description",
+  "main": "/js/adapt-pageMenuRouter.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-extension"
+  ],
+  "license": "GPLv3"
+}

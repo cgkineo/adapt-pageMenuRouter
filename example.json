@@ -1,0 +1,52 @@
+// To go in the course.json file
+    "_pageMenuRouter": {
+        "_hideBackButton": false,
+        "_events": {
+            "adapt:initialize large extralarge": "co-20",
+            "adapt:initialize small medium touch": "co-25",
+            "adapt:initialize small medium notouch": "co-25"
+        },
+        "_selectors": [
+            {
+                "_menus": [
+                    {
+                        "_id": "co-10"
+                    }
+                ],
+                "_selector": "a.menu-back-button", 
+                "_events": {
+                    "click small medium large extralarge": "co-20"
+                }
+            }
+        ],
+        "_buttons": [
+            {
+                "_components": [
+                    {
+                        "_id": "c-20"
+                    }
+                ],
+                "text": "Click me to go to co-40 for desktop and co35 for mobile",
+                "_dom": "#test",  
+                "_events": {
+                    "click large extralarge": "co-40",
+                    "click small medium": "co-35"
+                }
+            }
+        ],
+        "_topnavigations": [
+            {
+                "_pages": [
+                    {
+                        "_id": "co-20"
+                    }
+                ],
+                "text": "",
+                "_dom": ".icon.icon-popup",
+                "_events": {
+                    "click large extralarge": "#/",
+                    "click small medium": "co-70"
+                }
+            }
+        ]
+    }
