@@ -198,7 +198,7 @@ To add a button to a component:
     }
 ```
 
-Use to _dom item to add attributes or styles to your buttons or topnavigation buttons:
+Use the _dom item to add attributes or classes to your buttons or topnavigation buttons:
 ```
 
 "_dom": ".newClass.newClass2#newId[newAttribute='newAttributeValue']"
