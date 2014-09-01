@@ -267,6 +267,13 @@ define(function(require) {
 			var eventName = matches.shift();
 
 			if (isMatchingScreenSize(_screenSize, matches)) {
+
+				switch(eventName) {
+				case "adapt:initialize":
+					if (location.hash.substr(0,1) == "#" && location.hash.substr(0,2) == "#/" && location.hash > "#/") return;
+					break;
+				}
+
 				_onRouteTo = _.bind(onRouteTo, Adapt, to);
 				Adapt.on(eventName, _onRouteTo);
 			}
