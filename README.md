@@ -89,7 +89,13 @@ would match component c-20 and c-21
 Example Configuration (add to course.json):
 ```
     "_pageMenuRouter": {
-        "_hideBackButton": false,
+        "_hideBackButton": {
+            "_pages": [
+                {
+                    "_id": "co-05"
+                }
+            ]
+        },
         "_events": {
             "adapt:initialize large extralarge": "co-20",
             "adapt:initialize small medium touch": "co-25",
@@ -144,7 +150,18 @@ Example Configuration (add to course.json):
 To hide the back button globally:
 ```
     "_pageMenuRouter": {
-        "_hideBackButton": false
+        "_hideBackButton": {
+            "_pages": [
+                {
+                    "_type": "page"
+                }
+            ],
+            "_menus": [
+                {
+                    "_type": "menu"
+                }
+            ]
+        }
     }
 ```
 

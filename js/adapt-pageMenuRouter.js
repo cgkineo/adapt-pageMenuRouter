@@ -126,15 +126,17 @@ define(function(require) {
 	});
 
 	Adapt.on('router:page router:menu', function() { 
-		if (_config._hideBackButton) $(".navigation-back-button").css("display","none");
+		
 	});
 
 	Adapt.on("pageView:postRender", function(view) {
+		if (_config._hideBackButton) setupHideBackButtons(view, "pages");
 		if (_config._buttons) setupButtons(view, "pages");
 		if (_config._selectors) setupSelectors(view, "pages");
 		if (_config._topnavigations) setupTopNavigations(view, "pages");
 	});
 	Adapt.on("menuView:postRender", function(view) {
+		if (_config._hideBackButton) setupHideBackButtons(view, "menus");
 		if (_config._buttons) setupButtons(view, "menus");
 		if (_config._selectors) setupSelectors(view, "menus");
 		if (_config._topnavigations) setupTopNavigations(view, "menus");
@@ -279,6 +281,22 @@ define(function(require) {
 			}
 
 		});
+	};
+
+	var setupHideBackButtons = function(view, elementType) {
+		var model = view.model.toJSON();
+		var type = model._type;
+		var hide = false;
+
+		_.each( _config._hideBackButton["_" + elementType] , function (element) {
+			var answer = _.findWhere([model], element);
+			if (answer === undefined) return;
+			hide = true;
+		});
+
+		if (!hide) $(".navigation-back-button").css("display","");
+		else $(".navigation-back-button").css("display","none");
+		
 	};
 
 })
