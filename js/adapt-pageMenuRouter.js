@@ -15,6 +15,7 @@ define(function(require) {
 
 	var _config = undefined;
 	var _screenSize = undefined;
+	var _hideBackButton = false;
 
 	var DOMAttrs = function(object) {
         //GET DOM ELEMENT ATTRIBUTES AS {KEY: VALUE}
@@ -127,6 +128,9 @@ define(function(require) {
 
 	Adapt.on('router:page router:menu', function() { 
 		
+	});
+	Adapt.on("pageView:ready", function() {
+		_hideBackButton = false;
 	});
 
 	Adapt.on("pageView:postRender", function(view) {
@@ -286,15 +290,15 @@ define(function(require) {
 	var setupHideBackButtons = function(view, elementType) {
 		var model = view.model.toJSON();
 		var type = model._type;
-		var hide = false;
 
 		_.each( _config._hideBackButton["_" + elementType] , function (element) {
 			var answer = _.findWhere([model], element);
 			if (answer === undefined) return;
-			hide = true;
+			_hideBackButton = true;
 		});
 
-		if (!hide) $(".navigation-back-button").css("display","");
+
+		if (!_hideBackButton) $(".navigation-back-button").css("display","");
 		else $(".navigation-back-button").css("display","none");
 		
 	};
