@@ -123,7 +123,7 @@ define(function(require) {
 	});
 
 	Adapt.on('device:changed device:resize', function() {
-		_screenSize = getScreenSize();
+		if (_config !== undefined) _screenSize = getScreenSize();
 	});
 
 	Adapt.on('router:page router:menu', function() { 
@@ -134,29 +134,29 @@ define(function(require) {
 	});
 
 	Adapt.on("pageView:postRender", function(view) {
-		if (_config._hideBackButton) setupHideBackButtons(view, "pages");
-		if (_config._buttons) setupButtons(view, "pages");
-		if (_config._selectors) setupSelectors(view, "pages");
-		if (_config._topnavigations) setupTopNavigations(view, "pages");
+		if (_config !== undefined && _config._hideBackButton) setupHideBackButtons(view, "pages");
+		if (_config !== undefined && _config._buttons) setupButtons(view, "pages");
+		if (_config !== undefined && _config._selectors) setupSelectors(view, "pages");
+		if (_config !== undefined && _config._topnavigations) setupTopNavigations(view, "pages");
 	});
 	Adapt.on("menuView:postRender", function(view) {
-		if (_config._hideBackButton) setupHideBackButtons(view, "menus");
-		if (_config._buttons) setupButtons(view, "menus");
-		if (_config._selectors) setupSelectors(view, "menus");
-		if (_config._topnavigations) setupTopNavigations(view, "menus");
+		if (_config !== undefined && _config._hideBackButton) setupHideBackButtons(view, "menus");
+		if (_config !== undefined && _config._buttons) setupButtons(view, "menus");
+		if (_config !== undefined && _config._selectors) setupSelectors(view, "menus");
+		if (_config !== undefined && _config._topnavigations) setupTopNavigations(view, "menus");
 	});
 	 
 	Adapt.on("articleView:postRender", function(view) {
-		if (_config._buttons) setupButtons(view, "articles");
-		if (_config._selectors) setupSelectors(view, "articles");
+		if (_config !== undefined && _config._buttons) setupButtons(view, "articles");
+		if (_config !== undefined && _config._selectors) setupSelectors(view, "articles");
 	});
 	Adapt.on("blockView:postRender", function(view) {
-		if (_config._buttons) setupButtons(view, "blocks");
-		if (_config._selectors) setupSelectors(view, "blocks");
+		if (_config !== undefined && _config._buttons) setupButtons(view, "blocks");
+		if (_config !== undefined && _config._selectors) setupSelectors(view, "blocks");
 	});
 	Adapt.on("componentView:postRender", function(view) {
-		if (_config._buttons) setupButtons(view, "components");
-		if (_config._selectors) setupSelectors(view, "components");
+		if (_config !== undefined && _config._buttons) setupButtons(view, "components");
+		if (_config !== undefined && _config._selectors) setupSelectors(view, "components");
 	});
 
 	var setupTopNavigations = function(view, elementType) {
