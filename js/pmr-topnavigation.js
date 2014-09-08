@@ -19,6 +19,7 @@ define(function(require) {
 			this.$el.attr('href', '#');
             this.altText = '';
 			this.render();
+			this.options._isShown = true;
 		},
 
 		events: {
@@ -33,6 +34,12 @@ define(function(require) {
 
 		onRouteClicked: function(event) {
 			event.preventDefault();
+		},
+
+		remove: function() {
+			if (this.options !== undefined) this.options._isShown = false;
+			this.$el.remove();
+			this.stopListening();
 		}
 
 	});

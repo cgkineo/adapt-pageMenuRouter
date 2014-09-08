@@ -103,9 +103,9 @@ define(function(require) {
 			event.stopPropagation();
 		}
 		if (to.substr(0,1) == "#") {
-			Backbone.history.navigate(to, {trigger: true, replace: true});
+			Backbone.history.navigate(to, {trigger: true, replace: false});
 		} else if (to == "") {
-			Backbone.history.navigate("#/", {trigger: true, replace: true});
+			Backbone.history.navigate("#/", {trigger: true, replace: false});
 		} else {
 			Adapt.navigateToElement("." + to);
 		}
@@ -175,6 +175,7 @@ define(function(require) {
 		if (items.length === 0) return;
 
 		_.each(items, function(item) {
+			if (item._isShown) return;
 			var it = new PMRTopNavigation(item);
 			applyAlterations(it.$el, parseAlterations(item._dom) );
 
