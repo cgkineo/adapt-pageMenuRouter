@@ -98,6 +98,7 @@ define(function(require) {
 	}
 
 	var onRouteTo = function (to,event) {
+		Adapt.trigger("remove");
 		if (event) {
 			event.preventDefault();
 			event.stopPropagation();
@@ -160,6 +161,8 @@ define(function(require) {
 	});
 
 	var setupTopNavigations = function(view, elementType) {
+		if (view.model.get("_id") !== Adapt.location._currentId) return;
+
 		var model = view.model.toJSON();
 		var type = model._type;
 		var items = [];
@@ -177,6 +180,7 @@ define(function(require) {
 		_.each(items, function(item) {
 			if (item._isShown) return;
 			var it = new PMRTopNavigation(item);
+			item._currentView = it;
 			applyAlterations(it.$el, parseAlterations(item._dom) );
 
 			_.each(item._events, function(to, key) {

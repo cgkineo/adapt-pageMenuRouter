@@ -38,6 +38,7 @@ define(function(require) {
 
 		remove: function() {
 			if (this.options !== undefined) this.options._isShown = false;
+			delete this.options._currentView;
 			this.$el.remove();
 			this.stopListening();
 		}
