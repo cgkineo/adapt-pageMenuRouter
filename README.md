@@ -173,6 +173,12 @@ Example Configuration (add to course.json):
     }
 ```
 
+Events:  
+```
+On rendering a top navigation Adapt.trigger("pageMenuRouter:topNavigationView:postRender", view) is fired
+```
+  
+  
 To hide the back button globally:
 ```
     "_pageMenuRouter": {
