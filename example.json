@@ -25,6 +25,20 @@
                 }
             }
         ],
+        "_selectors": [
+             { 
+                "_components": [ 
+                    { "_type": "component" }
+                ], 
+                "_selector": ".icon-beaker a", 
+                "_events": { 
+                    "click small medium large extralarge": "@block 1" 
+                },
+                "_ignoreComponents" : [
+                    "blank"
+                ]
+            }
+        ],
         "_buttons": [
             {
                 "_components": [

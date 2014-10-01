@@ -3,9 +3,12 @@ adapt-pageMenuRouter
 
 Routing to pages and menus for various devices, buttons and configurations
 
-Routes can be specified in two formats:
+Routes can be specified in three formats:
 ```
 #/id/co-20   <- by url anchor
+
+
+
 
 or
 
@@ -17,6 +20,15 @@ i.e.
 
 #/    <- will go to the initial page
 
+
+  
+or  
+  
+  
+  
+@bank 1  <- will go to the next bank  
+  
+  
 ```
 
 Devices can be selected using the following names:
@@ -112,6 +124,20 @@ Example Configuration (add to course.json):
                 "_events": {
                     "click small medium large extralarge": "co-20"
                 }
+            }
+        ],
+        "_selectors": [
+             { 
+                "_components": [ 
+                    { "_type": "component" }
+                ], 
+                "_selector": ".icon-beaker a", 
+                "_events": { 
+                    "click small medium large extralarge": "@block 1" 
+                },
+                "_ignoreComponents" : [
+                    "blank"
+                ]
             }
         ],
         "_buttons": [
@@ -213,6 +239,24 @@ To add a button to a component:
             }
         ]
     }
+```
+  
+To force a series of component element clicks to move to the next block on the page, skipping blocks containing only blank components:
+```
+"_selectors": [
+     { 
+        "_components": [ 
+            { "_type": "component" }
+        ], 
+        "_selector": ".icon-beaker a", 
+        "_events": { 
+            "click small medium large extralarge": "@block 1" 
+        },
+        "_ignoreComponents" : [
+            "blank"
+        ]
+    }
+]
 ```
 
 Use the _dom item to add attributes or classes to your buttons or topnavigation buttons:

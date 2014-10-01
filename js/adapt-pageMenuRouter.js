@@ -35,7 +35,7 @@ define(function(require) {
     	var alterations = $(emmet.expandAbbreviation(_instance,"plain"))[0];
 		var attributes = DOMAttrs(alterations);
 		var content = undefined;
-		if ($(alterations).html() > "") content = $(alterations).html();
+		if ($(alterations).html() !== "") content = $(alterations).html();
 		return { attributes:attributes, content:content };
     }
 
@@ -47,7 +47,7 @@ define(function(require) {
 				$element.attr(key, value);
 			}
 		});
-		if ($element.html() !== "") $element.html(alterations.content);
+		if ($element.html() === "") $element.html(alterations.content);
     }
 
     //TODO: make dependency on adapt-ratioRestrict to use html.small etc
@@ -97,16 +97,120 @@ define(function(require) {
 		return false;
 	}
 
-	var onRouteTo = function (to,event) {
-		Adapt.trigger("remove");
+
+	var resolveType = function(_id, type) {
+		var current = Adapt.findById(_id)
+		var i = 0;
+		while	(i < 10) {
+			if (current.get("_type") == type) {
+				return current;
+			}
+			current = current.getParent();
+			i++;
+		}
+		throw new Error(type + " not found!");
+	}
+
+	var resolveItem = function(item, currentPage, currentModel, amount, type) {
+		var func;
+		if (amount === 0) return currentModel;
+
+		var _id = currentModel.get("_id");
+		var siblings = currentPage.findDescendants(type);
+		var index;
+		for (var i = 0; i < siblings.models.length; i++) {
+			if (siblings.models[i].get("_id") == _id) {
+				index = i
+				break;
+			}
+		}
+		if (index === undefined) return;
+
+		var items = 0;
+		if (amount < 0) {
+			for (var i = index; i > -1; i--) {
+				if (type === "components") {
+					if (item._ignoreComponents.indexOf(siblings.models[i].get("_component")) > -1) continue;
+				} else if (type === "blocks" || type === "articles") {
+					var components = siblings.models[i].findDescendants("components");
+					var ignore = false;
+					_.each(components.models, function(component) {
+						if (item._ignoreComponents.indexOf(component.get("_component")) > -1) ignore = true;
+					});
+					if (ignore) continue;
+				}
+				if (items == amount) {
+					return siblings.models[i];
+				}
+				items--;
+			}
+		} else if (amount > 0) {
+			for (var i = index; i < siblings.models.length; i++) {
+				if (type === "components") {
+					if (item._ignoreComponents.indexOf(siblings.models[i].get("_component")) > -1) continue;
+				} else if (type === "blocks" || type === "articles") {
+					var components = siblings.models[i].findDescendants("components");
+					var ignore = false;
+					_.each(components.models, function(component) {
+						if (item._ignoreComponents.indexOf(component.get("_component")) > -1) ignore = true;
+					});
+					if (ignore) continue;
+				}
+				if (items == amount) {
+					return siblings.models[i];
+				}
+				items++;
+			}
+		}
+		return undefined;
+
+	}
+
+
+	var onRouteTo = function (item, to, event) {
 		if (event) {
 			event.preventDefault();
 			event.stopPropagation();
 		}
 		if (to.substr(0,1) == "#") {
+			Adapt.trigger("remove");
 			Backbone.history.navigate(to, {trigger: true, replace: false});
 		} else if (to == "") {
+			Adapt.trigger("remove");
 			Backbone.history.navigate("#/", {trigger: true, replace: false});
+		} else if (to.substr(0,1) == "@") {
+			var sections = to.substr(1).split(" ");
+			var type = sections[0];
+			var amount = eval( "0" + sections[1] + ";" );
+			var currentId = this.model.get("_id");
+			var currentType = this.model.get("_type");
+			var currentPage = resolveType(currentId, "page");
+			switch (type) {
+			case "article":
+				var currentArticle = resolveType(currentId, "article");
+				var toItem = resolveItem(item, currentPage, currentArticle, amount, "articles");
+				if (toItem === undefined) return;
+				var next = $("." + toItem.get("_id"));
+				if (next.length === 0) return;
+				$.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:y});
+				break;
+			case "block":
+				var currentBlock = resolveType(currentId, "block");
+				var toItem = resolveItem(item, currentPage, currentBlock, amount, "blocks");
+				if (toItem === undefined) return;
+				var next = $("." + toItem.get("_id"));
+				if (next.length === 0) return;
+				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y'});
+				break;
+			case "component":
+				var currentComponent = resolveType(currentId, "component");
+				var toItem = resolveItem(item, currentPage, currentComponent, amount, "components");
+				if (toItem === undefined) return;
+				var next = $("." + toItem.get("_id"));
+				if (next.length === 0) return;
+				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y'});
+				break;
+			}
 		} else {
 			Adapt.navigateToElement("." + to);
 		}
@@ -130,14 +234,14 @@ define(function(require) {
 	Adapt.on('router:page router:menu', function() { 
 		
 	});
-	Adapt.on("pageView:ready", function() {
+	Adapt.on("pageView:ready", function(view) {
 		_hideBackButton = false;
+		if (_config !== undefined && _config._selectors) setupSelectors(view, "pages");
 	});
 
 	Adapt.on("pageView:postRender", function(view) {
 		if (_config !== undefined && _config._hideBackButton) setupHideBackButtons(view, "pages");
 		if (_config !== undefined && _config._buttons) setupButtons(view, "pages");
-		if (_config !== undefined && _config._selectors) setupSelectors(view, "pages");
 		if (_config !== undefined && _config._topnavigations) setupTopNavigations(view, "pages");
 	});
 	Adapt.on("menuView:postRender", function(view) {
@@ -182,14 +286,14 @@ define(function(require) {
 			var it = new PMRTopNavigation(item);
 			item._currentView = it;
 			applyAlterations(it.$el, parseAlterations(item._dom) );
-
+			it.postRender();
 			_.each(item._events, function(to, key) {
 
 				var matches = key.split(" ");
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to);
 					it.$el.on(eventName, _onRouteTo);
 				}
 
@@ -224,7 +328,7 @@ define(function(require) {
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to);
 					it.$el.on(eventName, _onRouteTo);
 				}
 
@@ -262,7 +366,7 @@ define(function(require) {
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to);
 					$el.off(eventName);
 					$el.on(eventName, _onRouteTo);
 				}
@@ -285,7 +389,7 @@ define(function(require) {
 					break;
 				}
 
-				_onRouteTo = _.bind(onRouteTo, Adapt, to);
+				_onRouteTo = _.bind(onRouteTo, view, Adapt, to);
 				Adapt.on(eventName, _onRouteTo);
 			}
 
