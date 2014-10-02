@@ -26,7 +26,7 @@ or
   
   
   
-@bank 1  <- will go to the next bank  
+@block 1  <- will go to the next block  
   
   
 ```
