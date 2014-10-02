@@ -192,7 +192,7 @@ define(function(require) {
 				if (toItem === undefined) return;
 				var next = $("." + toItem.get("_id"));
 				if (next.length === 0) return;
-				$.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:y});
+				$.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y', duration: 1000 });
 				break;
 			case "block":
 				var currentBlock = resolveType(currentId, "block");
@@ -200,7 +200,7 @@ define(function(require) {
 				if (toItem === undefined) return;
 				var next = $("." + toItem.get("_id"));
 				if (next.length === 0) return;
-				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y'});
+				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y', duration: 1000 });
 				break;
 			case "component":
 				var currentComponent = resolveType(currentId, "component");
@@ -208,7 +208,7 @@ define(function(require) {
 				if (toItem === undefined) return;
 				var next = $("." + toItem.get("_id"));
 				if (next.length === 0) return;
-				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y'});
+				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y', duration: 1000 });
 				break;
 			}
 		} else {
