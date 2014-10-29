@@ -178,7 +178,7 @@ define(function(require) {
 		} else if (to == "") {
 			Adapt.trigger("remove");
 			Backbone.history.navigate("#/", {trigger: true, replace: false});
-		} else if (to.substr(0,1) == "@") {
+		} else if (to.substr(0,1) == "@" && item !== undefined) {
 			var sections = to.substr(1).split(" ");
 			var type = sections[0];
 			var amount = eval( "0" + sections[1] + ";" );
@@ -389,7 +389,7 @@ define(function(require) {
 					break;
 				}
 
-				_onRouteTo = _.bind(onRouteTo, view, Adapt, to);
+				_onRouteTo = _.bind(onRouteTo, undefined, Adapt, to);
 				Adapt.on(eventName, _onRouteTo);
 			}
 
