@@ -446,4 +446,9 @@ define(function(require) {
 		
 	};
 
+	Adapt.pageMenuRouter = {
+		routeTo: onRouteTo,
+		getScreenSize: getScreenSize
+	};
+
 })
