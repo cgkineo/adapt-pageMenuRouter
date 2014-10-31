@@ -16,6 +16,7 @@ define(function(require) {
 	var _config = undefined;
 	var _screenSize = undefined;
 	var _hideBackButton = false;
+	var _attached = [];
 
 	var DOMAttrs = function(object) {
         //GET DOM ELEMENT ATTRIBUTES AS {KEY: VALUE}
@@ -234,8 +235,10 @@ define(function(require) {
 	Adapt.on('router:page router:menu', function() { 
 		
 	});
+
 	Adapt.on("pageView:ready", function(view) {
 		_hideBackButton = false;
+		removeEvents();
 		if (_config !== undefined && _config._selectors) setupSelectors(view, "pages");
 	});
 
@@ -245,6 +248,8 @@ define(function(require) {
 		if (_config !== undefined && _config._topnavigations) setupTopNavigations(view, "pages");
 	});
 	Adapt.on("menuView:postRender", function(view) {
+		if (view.$el.is(".menu-item")) return;
+		removeEvents();
 		if (_config !== undefined && _config._hideBackButton) setupHideBackButtons(view, "menus");
 		if (_config !== undefined && _config._buttons) setupButtons(view, "menus");
 		if (_config !== undefined && _config._selectors) setupSelectors(view, "menus");
@@ -263,6 +268,14 @@ define(function(require) {
 		if (_config !== undefined && _config._buttons) setupButtons(view, "components");
 		if (_config !== undefined && _config._selectors) setupSelectors(view, "components");
 	});
+
+	var removeEvents = function() {
+		var itemCount = _attached.length;
+		for (var i = 0; i < itemCount; i++) {
+			var event = _attached.pop();
+			event.$el.unbind(event.eventName, event.callback);
+		}
+	};
 
 	var setupTopNavigations = function(view, elementType) {
 		if (view.model.get("_id") !== Adapt.location._currentId) return;
@@ -295,6 +308,11 @@ define(function(require) {
 				if (isMatchingScreenSize(_screenSize, matches)) {
 					_onRouteTo = _.bind(onRouteTo, view, item, to);
 					it.$el.on(eventName, _onRouteTo);
+					_attached.push({
+						$el: it.$el,
+						eventName: eventName,
+						callback: _onRouteTo
+					});
 				}
 
 			});
@@ -330,6 +348,11 @@ define(function(require) {
 				if (isMatchingScreenSize(_screenSize, matches)) {
 					_onRouteTo = _.bind(onRouteTo, view, item, to);
 					it.$el.on(eventName, _onRouteTo);
+					_attached.push({
+						$el: it.$el,
+						eventName: eventName,
+						callback: _onRouteTo
+					});
 				}
 
 			});
@@ -355,7 +378,8 @@ define(function(require) {
 		if (items.length === 0) return;
 
 		_.each(items, function(item) {
-			var $el = view.$el.find(item._selector);
+			var $el = $(item._selector);
+			
 			if ($el.length === 0 ) return;
 
 			applyAlterations($el, parseAlterations(item._dom) );
@@ -369,6 +393,11 @@ define(function(require) {
 					_onRouteTo = _.bind(onRouteTo, view, item, to);
 					$el.off(eventName);
 					$el.on(eventName, _onRouteTo);
+					_attached.push({
+						$el: $el,
+						eventName: eventName,
+						callback: _onRouteTo
+					});
 				}
 
 			});
@@ -391,6 +420,11 @@ define(function(require) {
 
 				_onRouteTo = _.bind(onRouteTo, undefined, Adapt, to);
 				Adapt.on(eventName, _onRouteTo);
+				_attached.push({
+					$el: Adapt,
+					eventName: eventName,
+					callback: _onRouteTo
+				});
 			}
 
 		});
