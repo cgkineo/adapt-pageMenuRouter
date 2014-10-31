@@ -58,8 +58,6 @@ define(function(require) {
 
 		var ratio = Math.floor(width/height*100)/100;
 
-		console.log(ratio);
-
 		var aspectratio = 
 			(ratio > (16/9))
 				? "extrawidescreen"
@@ -131,12 +129,12 @@ define(function(require) {
 		if (amount < 0) {
 			for (var i = index; i > -1; i--) {
 				if (type === "components") {
-					if (item._ignoreComponents.indexOf(siblings.models[i].get("_component")) > -1) continue;
+					if (item !== undefined && item._ignoreComponents.indexOf(siblings.models[i].get("_component")) > -1) continue;
 				} else if (type === "blocks" || type === "articles") {
 					var components = siblings.models[i].findDescendants("components");
 					var ignore = false;
 					_.each(components.models, function(component) {
-						if (item._ignoreComponents.indexOf(component.get("_component")) > -1) ignore = true;
+						if (item !== undefined && item._ignoreComponents.indexOf(component.get("_component")) > -1) ignore = true;
 					});
 					if (ignore) continue;
 				}
@@ -148,12 +146,12 @@ define(function(require) {
 		} else if (amount > 0) {
 			for (var i = index; i < siblings.models.length; i++) {
 				if (type === "components") {
-					if (item._ignoreComponents.indexOf(siblings.models[i].get("_component")) > -1) continue;
+					if (item !== undefined && item._ignoreComponents.indexOf(siblings.models[i].get("_component")) > -1) continue;
 				} else if (type === "blocks" || type === "articles") {
 					var components = siblings.models[i].findDescendants("components");
 					var ignore = false;
 					_.each(components.models, function(component) {
-						if (item._ignoreComponents.indexOf(component.get("_component")) > -1) ignore = true;
+						if (item !== undefined && item._ignoreComponents.indexOf(component.get("_component")) > -1) ignore = true;
 					});
 					if (ignore) continue;
 				}
@@ -179,7 +177,7 @@ define(function(require) {
 		} else if (to == "") {
 			Adapt.trigger("remove");
 			Backbone.history.navigate("#/", {trigger: true, replace: false});
-		} else if (to.substr(0,1) == "@" && item !== undefined) {
+		} else if (to.substr(0,1) == "@") {
 			var sections = to.substr(1).split(" ");
 			var type = sections[0];
 			var amount = eval( "0" + sections[1] + ";" );
@@ -193,7 +191,7 @@ define(function(require) {
 				if (toItem === undefined) return;
 				var next = $("." + toItem.get("_id"));
 				if (next.length === 0) return;
-				$.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y', duration: 1000 });
+				$.scrollTo(next.offset()['top'] - $('.navigation').height() - parseInt(next.css("margin-top")), {axis:'y', duration: 1000 });
 				break;
 			case "block":
 				var currentBlock = resolveType(currentId, "block");
@@ -201,7 +199,7 @@ define(function(require) {
 				if (toItem === undefined) return;
 				var next = $("." + toItem.get("_id"));
 				if (next.length === 0) return;
-				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y', duration: 1000 });
+				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height() - parseInt(next.css("margin-top")), {axis:'y', duration: 1000 });
 				break;
 			case "component":
 				var currentComponent = resolveType(currentId, "component");
@@ -209,7 +207,7 @@ define(function(require) {
 				if (toItem === undefined) return;
 				var next = $("." + toItem.get("_id"));
 				if (next.length === 0) return;
-				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height(), {axis:'y', duration: 1000 });
+				Adapt.scrollTo(next.offset()['top'] - $('.navigation').height() - parseInt(next.css("margin-top")), {axis:'y', duration: 1000 });
 				break;
 			}
 		} else {
