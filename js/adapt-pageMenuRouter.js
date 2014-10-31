@@ -248,7 +248,7 @@ define(function(require) {
 		if (_config !== undefined && _config._topnavigations) setupTopNavigations(view, "pages");
 	});
 	Adapt.on("menuView:postRender", function(view) {
-		if (view.$el.is(".menu-item")) return;
+		if (!view.$el.is(".menu")) return;
 		removeEvents();
 		if (_config !== undefined && _config._hideBackButton) setupHideBackButtons(view, "menus");
 		if (_config !== undefined && _config._buttons) setupButtons(view, "menus");
