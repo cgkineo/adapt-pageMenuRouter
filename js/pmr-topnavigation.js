@@ -32,6 +32,10 @@ define(function(require) {
 	        return this; 
 		},
 
+		postRender: function() {
+			Adapt.trigger("pageMenuRouter:topNavigationView:postRender", this);
+		},
+
 		onRouteClicked: function(event) {
 			event.preventDefault();
 		},
