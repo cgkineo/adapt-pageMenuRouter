@@ -238,12 +238,13 @@ define(function(require) {
 		_hideBackButton = false;
 		removeEvents();
 		if (_config !== undefined && _config._selectors) setupSelectors(view, "pages");
-	});
-
-	Adapt.on("pageView:postRender", function(view) {
 		if (_config !== undefined && _config._hideBackButton) setupHideBackButtons(view, "pages");
 		if (_config !== undefined && _config._buttons) setupButtons(view, "pages");
 		if (_config !== undefined && _config._topnavigations) setupTopNavigations(view, "pages");
+	});
+
+	Adapt.on("pageView:postRender", function(view) {
+		
 	});
 	Adapt.on("menuView:postRender", function(view) {
 		if (!view.$el.is(".menu")) return;
