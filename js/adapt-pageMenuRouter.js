@@ -432,6 +432,8 @@ define(function(require) {
 		var model = view.model.toJSON();
 		var type = model._type;
 
+		_hideBackButton = false;
+
 		_.each( _config._hideBackButton["_" + elementType] , function (element) {
 			var answer = _.findWhere([model], element);
 			if (answer === undefined) return;
