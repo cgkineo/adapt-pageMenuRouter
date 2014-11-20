@@ -236,7 +236,6 @@ define(function(require) {
 
 	Adapt.on("pageView:ready", function(view) {
 		_hideBackButton = false;
-		removeEvents();
 		if (_config !== undefined && _config._selectors) setupSelectors(view, "pages");
 		if (_config !== undefined && _config._hideBackButton) setupHideBackButtons(view, "pages");
 		if (_config !== undefined && _config._buttons) setupButtons(view, "pages");
@@ -244,7 +243,7 @@ define(function(require) {
 	});
 
 	Adapt.on("pageView:postRender", function(view) {
-		
+		removeEvents();
 	});
 	Adapt.on("menuView:postRender", function(view) {
 		if (!view.$el.is(".menu")) return;
@@ -377,7 +376,12 @@ define(function(require) {
 		if (items.length === 0) return;
 
 		_.each(items, function(item) {
-			var $el = $(item._selector);
+			var $el;
+			if (item._global === false ){
+				$el = view.$(item._selector);	
+			} else {
+			 	$el = $(item._selector);
+			}
 			
 			if ($el.length === 0 ) return;
 

@@ -28,7 +28,10 @@ define(function(require) {
 
 		render: function() {
 	        var template = Handlebars.templates["pmr-topnavigation"];
-	        $('.navigation-drawer-toggle-button').after(this.$el.html(template(this.options)));
+	        this.$el.attr("role", "button");
+	        this.$el.attr("aria-label", this.options.ariaLabel);
+	        this.$el.html(template(this.options))
+	        $('.navigation-drawer-toggle-button').after(this.$el);
 	        return this; 
 		},
 

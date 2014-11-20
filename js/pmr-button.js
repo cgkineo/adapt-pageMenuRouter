@@ -26,6 +26,7 @@ define(function(require) {
 
 		render: function() {
 	        var template = Handlebars.templates["pmr-button"];
+	        this.$el.attr("aria-label", this.options.ariaLabel);
 	        this.$el.html(template(this.options));
 	        return this; 
 		},
