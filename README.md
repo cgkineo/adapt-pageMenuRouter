@@ -121,6 +121,7 @@ Example Configuration (add to course.json):
                     }
                 ],
                 "_selector": "a.menu-back-button", 
+                "_global": true,
                 "_events": {
                     "click small medium large extralarge": "co-20"
                 }
@@ -217,7 +218,8 @@ To change menu item behaviour:
                         "_id": "co-10"
                     }
                 ],
-                "_selector": "a.menu-back-button", 
+                "_selector": "a.menu-back-button",  
+                "_global": true,
                 "_events": {
                     "click small medium large extralarge": "co-20"
                 }
