@@ -166,7 +166,7 @@ define(function(require) {
 	}
 
 
-	var onRouteTo = function (item, to, event) {
+	var onRouteTo = function (item, to, replaceUrl, event) {
 		if (event) {
 			event.preventDefault();
 			event.stopPropagation();
@@ -211,7 +211,7 @@ define(function(require) {
 				break;
 			}
 		} else {
-			Adapt.navigateToElement("." + to);
+			Adapt.navigateToElement("." + to, undefined, undefined, replaceUrl);
 		}
 	}
 
@@ -304,7 +304,7 @@ define(function(require) {
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, view, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to, false);
 					it.$el.on(eventName, _onRouteTo);
 					_attached.push({
 						$el: it.$el,
@@ -344,7 +344,7 @@ define(function(require) {
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, view, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to, false);
 					it.$el.on(eventName, _onRouteTo);
 					_attached.push({
 						$el: it.$el,
@@ -393,7 +393,7 @@ define(function(require) {
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, view, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to, false);
 					$el.off(eventName);
 					$el.on(eventName, _onRouteTo);
 					_attached.push({
@@ -420,8 +420,8 @@ define(function(require) {
 					if (location.hash.substr(0,1) == "#" && location.hash.substr(0,2) == "#/" && location.hash > "#/") return;
 					break;
 				}
-
-				_onRouteTo = _.bind(onRouteTo, undefined, Adapt, to);
+				var replaceUrl = eventName == 'adapt:initialize';
+				_onRouteTo = _.bind(onRouteTo, undefined, Adapt, to, replaceUrl);
 				Adapt.on(eventName, _onRouteTo);
 				_attached.push({
 					$el: Adapt,
