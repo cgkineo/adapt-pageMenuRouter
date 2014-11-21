@@ -211,7 +211,17 @@ define(function(require) {
 				break;
 			}
 		} else {
-			Adapt.navigateToElement("." + to, undefined, undefined, replaceUrl);
+			var model = Adapt.findById(to);
+			if (model) {
+				switch (model.get("_type")) {
+				case "page": case "menu":
+					Backbone.history.navigate("#/id/"+to, {trigger: true, replace: false});
+					break;
+				default:
+					Adapt.navigateToElement("." + to, undefined, undefined, replaceUrl);		
+					break;
+				}
+			}
 		}
 	}
 
