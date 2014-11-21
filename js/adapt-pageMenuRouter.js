@@ -166,7 +166,7 @@ define(function(require) {
 	}
 
 
-	var onRouteTo = function (item, to, event) {
+	var onRouteTo = function (item, to, replaceUrl, event) {
 		if (event) {
 			event.preventDefault();
 			event.stopPropagation();
@@ -211,7 +211,17 @@ define(function(require) {
 				break;
 			}
 		} else {
-			Adapt.navigateToElement("." + to);
+			var model = Adapt.findById(to);
+			if (model) {
+				switch (model.get("_type")) {
+				case "page": case "menu":
+					Backbone.history.navigate("#/id/"+to, {trigger: true, replace: replaceUrl});
+					break;
+				default:
+					Adapt.navigateToElement("." + to);		
+					break;
+				}
+			}
 		}
 	}
 
@@ -304,7 +314,7 @@ define(function(require) {
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, view, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to, false);
 					it.$el.on(eventName, _onRouteTo);
 					_attached.push({
 						$el: it.$el,
@@ -344,7 +354,7 @@ define(function(require) {
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, view, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to, false);
 					it.$el.on(eventName, _onRouteTo);
 					_attached.push({
 						$el: it.$el,
@@ -393,7 +403,7 @@ define(function(require) {
 				var eventName = matches.shift();
 
 				if (isMatchingScreenSize(_screenSize, matches)) {
-					_onRouteTo = _.bind(onRouteTo, view, item, to);
+					_onRouteTo = _.bind(onRouteTo, view, item, to, false);
 					$el.off(eventName);
 					$el.on(eventName, _onRouteTo);
 					_attached.push({
@@ -428,8 +438,8 @@ define(function(require) {
 			        	}
 					break;
 				}
-
-				_onRouteTo = _.bind(onRouteTo, undefined, Adapt, to);
+				var replaceUrl = eventName == 'adapt:initialize';
+				_onRouteTo = _.bind(onRouteTo, undefined, Adapt, to, replaceUrl);
 				Adapt.on(eventName, _onRouteTo);
 				_attached.push({
 					$el: Adapt,
