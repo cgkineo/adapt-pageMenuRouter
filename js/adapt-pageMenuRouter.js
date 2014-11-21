@@ -218,7 +218,7 @@ define(function(require) {
 					Backbone.history.navigate("#/id/"+to, {trigger: true, replace: replaceUrl});
 					break;
 				default:
-					Adapt.navigateToElement("." + to, undefined, undefined, replaceUrl);		
+					Adapt.navigateToElement("." + to);		
 					break;
 				}
 			}
