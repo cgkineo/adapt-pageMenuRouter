@@ -215,7 +215,7 @@ define(function(require) {
 			if (model) {
 				switch (model.get("_type")) {
 				case "page": case "menu":
-					Backbone.history.navigate("#/id/"+to, {trigger: true, replace: false});
+					Backbone.history.navigate("#/id/"+to, {trigger: true, replace: replaceUrl});
 					break;
 				default:
 					Adapt.navigateToElement("." + to, undefined, undefined, replaceUrl);		
