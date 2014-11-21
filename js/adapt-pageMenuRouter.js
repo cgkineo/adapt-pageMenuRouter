@@ -418,6 +418,14 @@ define(function(require) {
 				switch(eventName) {
 				case "adapt:initialize":
 					if (location.hash.substr(0,1) == "#" && location.hash.substr(0,2) == "#/" && location.hash > "#/") return;
+					if (_.isArray(to)) {
+						if (Adapt.findById(to[0]).get('_isComplete')) {
+				                	console.info(to[0] + ' is complete so navigating to ' + to[1]);
+				                	to = to[1];
+				            	} else {
+				            		to = to[0];
+				            	}
+			        	}
 					break;
 				}
 
