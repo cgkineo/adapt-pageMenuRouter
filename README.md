@@ -208,6 +208,19 @@ To change application start/intro page:
     }
 ```
 
+To change application start/intro page advanced:
+```
+    "_pageMenuRouter": {
+        "_events": {
+            "adapt:initialize small medium large extralarge": [
+                "co-05", < skip if complete
+                "co-10"
+            ]
+        }
+    }
+
+```
+
 To change menu item behaviour:
 ```
     "_pageMenuRouter": {
