@@ -1,3 +1,5 @@
+!!NOTE!! To force adapt to start at a given page/menu, please now use: [adapt-start-controller](https://github.com/cgkineo/adapt-start-controller)
+
 adapt-pageMenuRouter
 ================
 
